@@ -1,25 +1,41 @@
 package com.probjj.probjj.entity;
-import java.util.Date;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import java.time.LocalDateTime;
+
+@Entity
 public class Usuario {
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
    private String rut;
    private String nombre;
    private String apellido;
    private String password;
-    private String email;
-    private String rol; 
-    private Date creatAt;
-   private  Date updateAt;
+   private String email;
+   private String direccion;
+   private Integer edad;
+   private String rol;
+   private LocalDateTime creatAt;
+   private LocalDateTime updateAt;
 
+   public Usuario() {
+   }
 
-   public Usuario(String rut, String nombre, String apellido, String password, String email, String rol, Date creatAt, Date updateAt) {
+   public Usuario(String rut, String nombre, String apellido, String password, String email, String direccion, Integer edad) {
        this.rut = rut;
        this.nombre = nombre;
        this.apellido = apellido;
        this.password = password;
        this.email = email;
-       this.rol = rol;
-       this.creatAt = creatAt;
-       this.updateAt = updateAt;
+       this.direccion = direccion;
+       this.edad = edad;
+       this.rol = "USER";
    }
 
    // Getters and Setters
@@ -53,22 +69,48 @@ public class Usuario {
    public void setEmail(String email) {
        this.email = email;
    }
+   public String getDireccion() {
+       return direccion;
+   }
+   public void setDireccion(String direccion) {
+       this.direccion = direccion;
+   }
+   public Integer getEdad() {
+       return edad;
+   }
+   public void setEdad(Integer edad) {
+       this.edad = edad;
+   }
    public String getRol() {
        return rol;
    }
    public void setRol(String rol) {
        this.rol = rol;
    }
-   public Date getCreatAt() {
+   public LocalDateTime getCreatAt() {
        return creatAt;
    }
-   public void setCreatAt(Date creatAt) {
+   public void setCreatAt(LocalDateTime creatAt) {
        this.creatAt = creatAt;
    }
-   public Date getUpdateAt() {
+   public LocalDateTime getUpdateAt() {
        return updateAt;
    }
-   public void setUpdateAt(Date updateAt) {
+   public void setUpdateAt(LocalDateTime updateAt) {
        this.updateAt = updateAt;
+   }
+   public Long getId() {
+       return id;
+   }
+   public void setId(Long id) {
+       this.id = id;
+   }
+   @PrePersist
+   protected void prePersist() {
+       this.creatAt = LocalDateTime.now();
+   }
+   @PreUpdate
+   protected void preUpdate() {
+       this.updateAt = LocalDateTime.now();
    }
 }

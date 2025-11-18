@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad CRUD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .navbar-nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.3);
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .form-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #f0f3f7 100%);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .form-section h2 {
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input[type="number"],
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.2);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .table-section {
+            margin-top: 40px;
+        }
+        
+        .table-section h2 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 6px 12px;
+            font-size: 12px;
+            width: auto;
+        }
+        
+        .delete-btn:hover {
+            box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-style: italic;
+            font-size: 16px;
+        }
+        
+        .error-message {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .navbar-nav {
+                gap: 10px;
+            }
+            
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            🥋 PROBJJ
+        </a>
+        <div class="navbar-nav">
+            <a href="/" class="nav-link">Inicio</a>
+            <a href="/actividad/" class="nav-link active">Actividad</a>
+            <a href="/competencia/" class="nav-link">Competencia</a>
+            <a href="/nutrition/" class="nav-link">Nutrición</a>
+            <a href="/login" class="nav-link">Login</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h1>💪 Gestión de Actividades</h1>
+        
+        <!-- Mensaje de Error -->
+        <div th:if="${error}" class="error-message">
+            <strong>⚠️ Error:</strong> <span th:text="${error}"></span>
+        </div>
+        
+        <!-- Formulario de Crear -->
+        <div class="form-section">
+            <h2>➕ Crear Nueva Actividad</h2>
+            <form th:action="@{/actividad/create}" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userName">Nombre Usuario *</label>
+                        <input type="text" id="userName" name="userName" placeholder="Ej: Juan Pérez" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoActividad">Tipo Actividad *</label>
+                        <select id="tipoActividad" name="tipoActividad" required>
+                            <option value="">Selecciona un tipo</option>
+                            <option value="Sparring">Sparring</option>
+                            <option value="Técnica">Técnica</option>
+                            <option value="Cardio">Cardio</option>
+                            <option value="Fuerza">Fuerza</option>
+                            <option value="Flexibilidad">Flexibilidad</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="duracion">Duración (min) *</label>
+                        <input type="number" id="duracion" name="duracion" min="1" max="480" placeholder="Ej: 60" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="intensidad">Intensidad (1-10) *</label>
+                        <input type="number" id="intensidad" name="intensidad" min="1" max="10" placeholder="Ej: 8" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="caloriasBurnadas">Calorías Quemadas</label>
+                        <input type="number" id="caloriasBurnadas" name="caloriasBurnadas" step="0.1" placeholder="Opcional">
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea id="descripcion" name="descripcion" placeholder="Notas sobre la actividad" rows="3"></textarea>
+                    </div>
+                </div>
+                <button type="submit">💾 Guardar Actividad</button>
+            </form>
+        </div>
+        
+        <!-- Tabla de Registros -->
+        <div class="table-section">
+            <h2>📋 Registro de Actividades</h2>
+            <div th:if="${actividadList.isEmpty()}" class="empty-message">
+                No hay actividades registradas. ¡Crea la primera! 🚀
+            </div>
+            <table th:if="${!actividadList.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre Usuario</th>
+                        <th>Tipo Actividad</th>
+                        <th>Duración (min)</th>
+                        <th>Intensidad</th>
+                        <th>Calorías</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="actividad : ${actividadList}">
+                        <td th:text="${actividad.id}"></td>
+                        <td th:text="${actividad.userName}"></td>
+                        <td th:text="${actividad.tipoActividad}"></td>
+                        <td th:text="${actividad.duracion}"></td>
+                        <td>
+                            <span th:if="${actividad.intensidad >= 8}" style="color: #dc3545; font-weight: bold;">⚡ <span th:text="${actividad.intensidad}"></span>/10</span>
+                            <span th:if="${actividad.intensidad < 8 && actividad.intensidad >= 5}" style="color: #ffc107; font-weight: bold;">⚠️ <span th:text="${actividad.intensidad}"></span>/10</span>
+                            <span th:if="${actividad.intensidad < 5}" style="color: #28a745; font-weight: bold;">✓ <span th:text="${actividad.intensidad}"></span>/10</span>
+                        </td>
+                        <td th:text="${#numbers.formatDecimal(actividad.caloriasBurnadas, 1, 2)}"></td>
+                        <td th:text="${actividad.descripcion}"></td>
+                        <td th:text="${#temporals.format(actividad.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <div class="action-buttons">
+                                <a th:href="@{/actividad/delete/{id}(id=${actividad.id})}" class="delete-btn" onclick="return confirm('¿Estás seguro?')">🗑️ Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

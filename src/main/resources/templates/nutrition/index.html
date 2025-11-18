@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Data CRUD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .navbar-nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.3);
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        .form-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .form-section h2 {
+            color: #007bff;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0,123,255,0.25);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        .table-section {
+            margin-top: 30px;
+        }
+        
+        .table-section h2 {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .delete-btn {
+            background-color: #dc3545;
+            padding: 6px 12px;
+            font-size: 12px;
+            width: auto;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-style: italic;
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            🥋 PROBJJ
+        </a>
+        <div class="navbar-nav">
+            <a href="/" class="nav-link">Inicio</a>
+            <a href="/actividad/" class="nav-link">Actividad</a>
+            <a href="/competencia/" class="nav-link">Competencia</a>
+            <a href="/nutrition/" class="nav-link active">Nutrición</a>
+            <a href="/login" class="nav-link">Login</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h1>📊 Gestión de Datos Nutricionales</h1>
+        
+        <!-- Mensaje de Error -->
+        <div th:if="${error}" class="success-message" style="background-color: #f8d7da; border-left-color: #dc3545; color: #721c24;">
+            <strong>⚠️ Error:</strong> <span th:text="${error}"></span>
+        </div>
+        
+        <!-- Formulario de Crear -->
+        <div class="form-section">
+            <h2>➕ Crear Nuevo Registro</h2>
+            <form th:action="@{/nutrition/create}" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userName">Nombre Usuario *</label>
+                        <input type="text" id="userName" name="userName" placeholder="Ej: Juan Pérez" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edad">Edad *</label>
+                        <input type="number" id="edad" name="edad" min="13" max="120" placeholder="Ej: 25" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="estatura">Estatura (cm) *</label>
+                        <input type="number" id="estatura" name="estatura" step="0.1" min="100" max="250" placeholder="Ej: 180" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="peso">Peso (kg) *</label>
+                        <input type="number" id="peso" name="peso" step="0.1" min="30" max="300" placeholder="Ej: 75" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tiempoEntrenamiento">Tiempo Entrenamiento (min) *</label>
+                        <input type="number" id="tiempoEntrenamiento" name="tiempoEntrenamiento" min="0" max="1440" placeholder="Ej: 60" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="calories">Calorías</label>
+                        <input type="number" id="calories" name="calories" step="0.01" placeholder="Opcional">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="proteins">Proteínas (g)</label>
+                        <input type="number" id="proteins" name="proteins" step="0.01" placeholder="Opcional">
+                    </div>
+                    <div class="form-group">
+                        <label for="carbohydrates">Carbohidratos (g)</label>
+                        <input type="number" id="carbohydrates" name="carbohydrates" step="0.01" placeholder="Opcional">
+                    </div>
+                    <div class="form-group">
+                        <label for="caloriesGoal">Meta de Calorías</label>
+                        <input type="number" id="caloriesGoal" name="caloriesGoal" step="0.01" placeholder="Opcional">
+                    </div>
+                </div>
+                <button type="submit">Guardar Registro</button>
+            </form>
+        </div>
+        
+        <!-- Tabla de Registros -->
+        <div class="table-section">
+            <h2>📋 Lista de Registros</h2>
+            <div th:if="${nutritionList.isEmpty()}" class="empty-message">
+                No hay registros aún. ¡Crea el primero!
+            </div>
+            <table th:if="${!nutritionList.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre Usuario</th>
+                        <th>Edad</th>
+                        <th>Estatura (cm)</th>
+                        <th>Peso (kg)</th>
+                        <th>Tiempo Entreno (min)</th>
+                        <th>Calorías</th>
+                        <th>Proteínas (g)</th>
+                        <th>Carbohidratos (g)</th>
+                        <th>Creado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="nutrition : ${nutritionList}">
+                        <td th:text="${nutrition.id}"></td>
+                        <td th:text="${nutrition.userName}"></td>
+                        <td th:text="${nutrition.edad}"></td>
+                        <td th:text="${nutrition.estatura}"></td>
+                        <td th:text="${nutrition.peso}"></td>
+                        <td th:text="${nutrition.tiempoEntrenamiento}"></td>
+                        <td th:text="${#numbers.formatDecimal(nutrition.calories, 1, 2)}"></td>
+                        <td th:text="${#numbers.formatDecimal(nutrition.proteins, 1, 2)}"></td>
+                        <td th:text="${#numbers.formatDecimal(nutrition.carbohydrates, 1, 2)}"></td>
+                        <td th:text="${#temporals.format(nutrition.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <div class="action-buttons">
+                                <a th:href="@{/nutrition/delete/{id}(id=${nutrition.id})}" class="delete-btn" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

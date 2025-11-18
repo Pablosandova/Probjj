@@ -1,68 +1,121 @@
 package com.probjj.probjj.controllers;
 
-import com.probjj.probjj.models.NutritionData;
+import com.probjj.probjj.entity.NutritionDataEntity;
+import com.probjj.probjj.service.NutritionDataService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/nutrition")
 public class NutritionController {
     
-    private List<NutritionData> nutritionDataList = new ArrayList<>();
-    private NutritionData goals;
+    @Autowired
+    private NutritionDataService nutritionDataService;
 
-    public NutritionController() {
-        // Inicializar metas por defecto
-        goals = new NutritionData();
-        goals.setCaloriesGoal(2500);
-        goals.setProteinsGoal(150);
-        goals.setCarbohydratesGoal(300);
-    }
-
-    @PostMapping("/add")
-    @ResponseBody
-    public ResponseEntity<?> addNutritionData(@RequestBody NutritionData data) {
-        data.setDateTime(LocalDateTime.now());
-        // Establecer las metas actuales
-        data.setCaloriesGoal(goals.getCaloriesGoal());
-        data.setProteinsGoal(goals.getProteinsGoal());
-        data.setCarbohydratesGoal(goals.getCarbohydratesGoal());
-        nutritionDataList.add(data);
-        return ResponseEntity.ok(data);
-    }
-
-    @GetMapping("/latest")
-    @ResponseBody
-    public ResponseEntity<?> getLatestNutritionData() {
-        if (nutritionDataList.isEmpty()) {
-            return ResponseEntity.ok(goals);
+    // Vista principal
+    @GetMapping("/")
+    public String index(Model model) {
+        List<NutritionDataEntity> nutritionList = nutritionDataService.getAllNutritionData();
+        model.addAttribute("nutritionList", nutritionList);
+        if (!model.containsAttribute("nutritionData")) {
+            model.addAttribute("nutritionData", new NutritionDataEntity());
         }
-        return ResponseEntity.ok(nutritionDataList.get(nutritionDataList.size() - 1));
+        return "nutrition/index";
     }
 
-    @GetMapping("/history")
+    // API REST - Listar todos
+    @GetMapping("/api/all")
     @ResponseBody
-    public ResponseEntity<?> getNutritionHistory() {
-        return ResponseEntity.ok(nutritionDataList);
+    public ResponseEntity<?> getAllNutritionData() {
+        List<NutritionDataEntity> list = nutritionDataService.getAllNutritionData();
+        return ResponseEntity.ok(list);
     }
 
-    @PostMapping("/goals")
+    // API REST - Obtener por ID
+    @GetMapping("/api/{id}")
     @ResponseBody
-    public ResponseEntity<?> updateGoals(@RequestBody NutritionData newGoals) {
-        goals.setCaloriesGoal(newGoals.getCaloriesGoal());
-        goals.setProteinsGoal(newGoals.getProteinsGoal());
-        goals.setCarbohydratesGoal(newGoals.getCarbohydratesGoal());
-        return ResponseEntity.ok(goals);
+    public ResponseEntity<?> getNutritionData(@PathVariable Long id) {
+        Optional<NutritionDataEntity> nutritionData = nutritionDataService.getNutritionDataById(id);
+        return nutritionData.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/goals")
+    // API REST - Obtener por nombre de usuario
+    @GetMapping("/api/user/{userName}")
     @ResponseBody
-    public ResponseEntity<?> getGoals() {
-        return ResponseEntity.ok(goals);
+    public ResponseEntity<?> getNutritionDataByUserName(@PathVariable String userName) {
+        List<NutritionDataEntity> list = nutritionDataService.getNutritionDataByUserName(userName);
+        return ResponseEntity.ok(list);
+    }
+
+    // API REST - Crear
+    @PostMapping("/api/create")
+    @ResponseBody
+    public ResponseEntity<?> createNutritionData(@RequestBody NutritionDataEntity nutritionData) {
+        try {
+            NutritionDataEntity created = nutritionDataService.createNutritionData(nutritionData);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    // Crear desde formulario
+    @PostMapping("/create")
+    public String createFromForm(@ModelAttribute NutritionDataEntity nutritionData, Model model) {
+        try {
+            nutritionDataService.createNutritionData(nutritionData);
+            return "redirect:/nutrition/";
+        } catch (Exception e) {
+            List<NutritionDataEntity> nutritionList = nutritionDataService.getAllNutritionData();
+            model.addAttribute("nutritionList", nutritionList);
+            model.addAttribute("nutritionData", new NutritionDataEntity());
+            model.addAttribute("error", "Error al guardar: " + e.getMessage());
+            return "nutrition/index";
+        }
+    }
+
+    // API REST - Actualizar
+    @PutMapping("/api/update/{id}")
+    @ResponseBody
+    public ResponseEntity<?> updateNutritionData(@PathVariable Long id, @RequestBody NutritionDataEntity nutritionDataDetails) {
+        try {
+            NutritionDataEntity updated = nutritionDataService.updateNutritionData(id, nutritionDataDetails);
+            if (updated != null) {
+                return ResponseEntity.ok(updated);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    // API REST - Eliminar
+    @DeleteMapping("/api/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteNutritionData(@PathVariable Long id) {
+        try {
+            Optional<NutritionDataEntity> nutritionData = nutritionDataService.getNutritionDataById(id);
+            if (nutritionData.isPresent()) {
+                nutritionDataService.deleteNutritionData(id);
+                return ResponseEntity.ok("Eliminado correctamente");
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    // Eliminar desde formulario
+    @GetMapping("/delete/{id}")
+    public String deleteFromForm(@PathVariable Long id) {
+        nutritionDataService.deleteNutritionData(id);
+        return "redirect:/nutrition/";
     }
 }
