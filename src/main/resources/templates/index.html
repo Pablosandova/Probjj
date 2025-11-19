@@ -379,9 +379,11 @@
         <a href="/actividad/">Actividad</a>
         <a href="/competencia/">Competencia</a>
         <a href="/nutrition/">Nutrición</a>
-        <a href="#">Actividad</a>
-        <a href="#">Competencia</a>
-        <a href="/login" class="login-link">Iniciar Sesión</a>
+        <span th:if="${isAuthenticated}">
+          <span th:text="${usuarioNombre}" style="color: white; margin-right: 10px;"></span>
+          <a href="/logout" class="login-link">Cerrar Sesión</a>
+        </span>
+        <a th:unless="${isAuthenticated}" href="/login" class="login-link">Iniciar Sesión</a>
       </nav>
     </div>
   </header>

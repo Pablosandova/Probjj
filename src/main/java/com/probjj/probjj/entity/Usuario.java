@@ -20,6 +20,7 @@ public class Usuario {
    private String email;
    private String direccion;
    private Integer edad;
+   private Double estatura;
    private String rol;
    private LocalDateTime creatAt;
    private LocalDateTime updateAt;
@@ -80,6 +81,12 @@ public class Usuario {
    }
    public void setEdad(Integer edad) {
        this.edad = edad;
+   }
+   public Double getEstatura() {
+       return estatura;
+   }
+   public void setEstatura(Double estatura) {
+       this.estatura = estatura;
    }
    public String getRol() {
        return rol;

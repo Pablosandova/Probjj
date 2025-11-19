@@ -1,12 +1,15 @@
 package com.probjj.probjj.controllers;
 
 import com.probjj.probjj.entity.NutritionDataEntity;
+import com.probjj.probjj.entity.RecomendacionEntity;
 import com.probjj.probjj.service.NutritionDataService;
+import com.probjj.probjj.service.RecomendacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,14 +20,34 @@ public class NutritionController {
     
     @Autowired
     private NutritionDataService nutritionDataService;
+    
+    @Autowired
+    private RecomendacionService recomendacionService;
 
     // Vista principal
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, HttpSession session) {
         List<NutritionDataEntity> nutritionList = nutritionDataService.getAllNutritionData();
         model.addAttribute("nutritionList", nutritionList);
+        
+        // Cargar datos de sesión
+        String usuarioNombre = (String) session.getAttribute("usuarioNombre");
+        Integer usuarioEdad = (Integer) session.getAttribute("usuarioEdad");
+        Double usuarioEstatura = (Double) session.getAttribute("usuarioEstatura");
+        
+        model.addAttribute("usuarioNombre", usuarioNombre);
+        model.addAttribute("usuarioEdad", usuarioEdad);
+        model.addAttribute("usuarioEstatura", usuarioEstatura);
+        model.addAttribute("sesionActiva", usuarioNombre != null);
+        
         if (!model.containsAttribute("nutritionData")) {
-            model.addAttribute("nutritionData", new NutritionDataEntity());
+            NutritionDataEntity nuevoNutrition = new NutritionDataEntity();
+            if (usuarioNombre != null) {
+                nuevoNutrition.setUserName(usuarioNombre);
+                nuevoNutrition.setEdad(usuarioEdad);
+                nuevoNutrition.setEstatura(usuarioEstatura);
+            }
+            model.addAttribute("nutritionData", nuevoNutrition);
         }
         return "nutrition/index";
     }
@@ -71,6 +94,16 @@ public class NutritionController {
     public String createFromForm(@ModelAttribute NutritionDataEntity nutritionData, Model model) {
         try {
             nutritionDataService.createNutritionData(nutritionData);
+            
+            // Generar recomendaciones automáticamente
+            if (nutritionData.getEstatura() != null && nutritionData.getPeso() != null) {
+                recomendacionService.generateRecomendations(
+                    nutritionData.getUserName(),
+                    nutritionData.getPeso(),
+                    nutritionData.getEstatura()
+                );
+            }
+            
             return "redirect:/nutrition/";
         } catch (Exception e) {
             List<NutritionDataEntity> nutritionList = nutritionDataService.getAllNutritionData();
@@ -110,6 +143,21 @@ public class NutritionController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
+    }
+
+    // Ver recomendaciones
+    @GetMapping("/recomendaciones/{id}")
+    public String verRecomendaciones(@PathVariable Long id, Model model) {
+        Optional<NutritionDataEntity> nutrition = nutritionDataService.getNutritionDataById(id);
+        if (nutrition.isPresent()) {
+            NutritionDataEntity nutritionData = nutrition.get();
+            List<RecomendacionEntity> recomendaciones = recomendacionService.getRecomendacionesByUserName(nutritionData.getUserName());
+            
+            model.addAttribute("nutrition", nutritionData);
+            model.addAttribute("recomendaciones", recomendaciones);
+            return "nutrition/recomendaciones";
+        }
+        return "redirect:/nutrition/";
     }
 
     // Eliminar desde formulario

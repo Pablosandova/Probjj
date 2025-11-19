@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +21,23 @@ public class CompetenciaController {
 
     // Vista principal
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, HttpSession session) {
         List<CompetenciaEntity> competenciaList = competenciaService.getAllCompetencias();
         model.addAttribute("competenciaList", competenciaList);
+        
+        // Cargar datos de sesión
+        String usuarioNombre = (String) session.getAttribute("usuarioNombre");
+        Integer usuarioEdad = (Integer) session.getAttribute("usuarioEdad");
+        Double usuarioEstatura = (Double) session.getAttribute("usuarioEstatura");
+        
+        model.addAttribute("usuarioNombre", usuarioNombre);
+        model.addAttribute("usuarioEdad", usuarioEdad);
+        model.addAttribute("usuarioEstatura", usuarioEstatura);
+        model.addAttribute("sesionActiva", usuarioNombre != null);
+        
         if (!model.containsAttribute("competencia")) {
-            model.addAttribute("competencia", new CompetenciaEntity());
+            CompetenciaEntity nuevaCompetencia = new CompetenciaEntity();
+            model.addAttribute("competencia", nuevaCompetencia);
         }
         return "competencia/index";
     }

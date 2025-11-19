@@ -4,6 +4,7 @@ import com.probjj.probjj.entity.Usuario;
 import com.probjj.probjj.dao.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,11 @@ public class UsuarioService {
         }
         // Intentar con RUT
         return usuarioRepository.findByRutAndPassword(identifier, password);
+    }
+
+    // Obtener todos los usuarios
+    public List<Usuario> obtenerTodos() {
+        return usuarioRepository.findAll();
     }
 
     // Obtener usuario por ID

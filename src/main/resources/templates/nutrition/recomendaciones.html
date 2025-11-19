@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendaciones Nutricionales - PROBJJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-nav {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            color: #764ba2;
+            transform: translateX(-5px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .user-info {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            color: #999;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .imc-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .imc-bajo {
+            background: #bbdefb;
+            color: #1565c0;
+        }
+
+        .imc-normal {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .imc-sobrepeso {
+            background: #ffe0b2;
+            color: #e65100;
+        }
+
+        .imc-obesidad {
+            background: #ffccbc;
+            color: #bf360c;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .recommendation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .recommendation-card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .recommendation-card p {
+            color: #555;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+
+        .macro-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            grid-column: 1 / -1;
+        }
+
+        .macro-container h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 24px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .macro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .macro-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            text-align: center;
+        }
+
+        .macro-card.protein {
+            border-left-color: #e57373;
+        }
+
+        .macro-card.carbs {
+            border-left-color: #64b5f6;
+        }
+
+        .macro-card.fat {
+            border-left-color: #ffb74d;
+        }
+
+        .macro-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .macro-label {
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .macro-value {
+            color: #333;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .macro-unit {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .macro-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="navbar-brand">🥋 PROBJJ</a>
+            <div class="navbar-nav">
+                <a href="/" class="nav-link">Inicio</a>
+                <a href="/nutrition/" class="nav-link active">Nutrición</a>
+                <a href="/login" class="nav-link">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <a href="/nutrition/" class="back-link">← Volver a Nutrición</a>
+
+        <!-- HEADER -->
+        <div class="header">
+            <h1>🎯 Recomendaciones Personalizadas</h1>
+            <p th:text="'Usuario: ' + ${nutrition.userName}"></p>
+        </div>
+
+        <!-- USER INFO -->
+        <div class="user-info">
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-label">Edad</div>
+                    <div class="info-value" th:text="${nutrition.edad} + ' años'"></div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Estatura</div>
+                    <div class="info-value" th:text="${nutrition.estatura} + ' cm'"></div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Peso Actual</div>
+                    <div class="info-value" th:text="${nutrition.peso} + ' kg'"></div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">IMC</div>
+                    <div class="info-value" th:each="rec : ${recomendaciones}" th:text="${#numbers.formatDecimal(rec.imc, 1, 1)}"></div>
+                    <div class="imc-badge" 
+                         th:classappend="${recomendaciones[0].categoriaImc == 'Bajo peso' ? 'imc-bajo' : 
+                                         recomendaciones[0].categoriaImc == 'Peso normal' ? 'imc-normal' : 
+                                         recomendaciones[0].categoriaImc == 'Sobrepeso' ? 'imc-sobrepeso' : 'imc-obesidad'}"
+                         th:each="rec : ${recomendaciones}"
+                         th:text="${rec.categoriaImc}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MACRONUTRIENTS -->
+        <div class="macro-container" th:each="rec : ${recomendaciones}">
+            <h2>📊 Distribución de Macronutrientes Diaria</h2>
+            <div class="macro-grid">
+                <div class="macro-card protein">
+                    <div class="macro-icon">🥩</div>
+                    <div class="macro-label">Proteínas</div>
+                    <div class="macro-value" th:text="${rec.proteinasGramos}"></div>
+                    <div class="macro-unit">gramos/día</div>
+                </div>
+                <div class="macro-card carbs">
+                    <div class="macro-icon">🍚</div>
+                    <div class="macro-label">Carbohidratos</div>
+                    <div class="macro-value" th:text="${rec.carbohidratosGramos}"></div>
+                    <div class="macro-unit">gramos/día</div>
+                </div>
+                <div class="macro-card fat">
+                    <div class="macro-icon">🥑</div>
+                    <div class="macro-label">Grasas</div>
+                    <div class="macro-value" th:text="${rec.grasasGramos}"></div>
+                    <div class="macro-unit">gramos/día</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECOMMENDATIONS -->
+        <div class="content-grid">
+            <div class="recommendation-card" th:each="rec : ${recomendaciones}">
+                <h2>🍎 Recomendaciones Alimentarias</h2>
+                <p th:text="${rec.recomendacionesAlimentarias}"></p>
+            </div>
+
+            <div class="recommendation-card" th:each="rec : ${recomendaciones}">
+                <h2>💪 Recomendaciones de Entrenamiento</h2>
+                <p th:text="${rec.recomendacionesEntrenamiento}"></p>
+            </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+            <a href="/nutrition/" class="btn">← Volver a Mis Registros</a>
+        </div>
+    </div>
+</body>
+</html>

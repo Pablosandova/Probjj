@@ -275,12 +275,27 @@
         <!-- Formulario de Crear -->
         <div class="form-section">
             <h2>➕ Crear Nueva Actividad</h2>
+            
+            <div th:if="${sesionActiva}" style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #4CAF50;">
+                <strong style="color: #2e7d32;">✅ Usuario Registrado:</strong>
+                <p style="color: #555; margin: 8px 0 0 0;">
+                    <strong th:text="${usuarioNombre}"></strong> 
+                    | Edad: <span th:text="${usuarioEdad}"></span> años 
+                    | Estatura: <span th:text="${usuarioEstatura}"></span> cm
+                </p>
+            </div>
+            
             <form th:action="@{/actividad/create}" method="post">
-                <div class="form-row">
+                <input type="hidden" name="userName" th:value="${usuarioNombre}" th:if="${sesionActiva}">
+                
+                <div class="form-row" th:unless="${sesionActiva}">
                     <div class="form-group">
                         <label for="userName">Nombre Usuario *</label>
                         <input type="text" id="userName" name="userName" placeholder="Ej: Juan Pérez" required>
                     </div>
+                </div>
+                
+                <div class="form-row">
                     <div class="form-group">
                         <label for="tipoActividad">Tipo Actividad *</label>
                         <select id="tipoActividad" name="tipoActividad" required>

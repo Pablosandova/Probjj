@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - PROBJJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 15px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #764ba2;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .usuarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .usuario-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .usuario-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .usuario-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .usuario-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .usuario-nombre {
+            flex: 1;
+        }
+
+        .usuario-nombre h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+
+        .usuario-nombre p {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .usuario-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: #f8f8f8;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .usuario-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #999;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .usuarios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .usuario-actions {
+                flex-direction: column;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div>
+            <a href="/">🥋 PROBJJ</a>
+        </div>
+        <div>
+            <a href="/nutricion/">Nutrición</a>
+            <a href="/actividad/">Actividad</a>
+            <a href="/competencia/">Competencia</a>
+            <a href="/usuario/">Usuarios</a>
+            <a href="/logout">Salir</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>👥 Gestión de Usuarios</h1>
+            <p>Administra todos los usuarios registrados en el sistema</p>
+        </div>
+
+        <!-- LISTA DE USUARIOS -->
+        <div th:if="${!usuarios.isEmpty()}" class="usuarios-grid">
+            <div class="usuario-card" th:each="usuario : ${usuarios}">
+                <!-- HEADER -->
+                <div class="usuario-header">
+                    <div class="usuario-avatar" th:text="${usuario.getNombre().charAt(0)}"></div>
+                    <div class="usuario-nombre">
+                        <h3 th:text="${usuario.getNombre() + ' ' + usuario.getApellido()}"></h3>
+                        <p th:text="${usuario.getRut()}"></p>
+                    </div>
+                </div>
+
+                <!-- INFO -->
+                <div class="usuario-info">
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value" th:text="${usuario.getEmail()}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Edad</div>
+                        <div class="info-value" th:text="${usuario.getEdad() != null ? usuario.getEdad() + ' años' : '-'}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Estatura</div>
+                        <div class="info-value" th:text="${usuario.getEstatura() != null ? usuario.getEstatura() + ' cm' : '-'}"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Rol</div>
+                        <div class="info-value" th:text="${usuario.getRol()}"></div>
+                    </div>
+                </div>
+
+                <!-- DIRECCIÓN -->
+                <div class="info-item">
+                    <div class="info-label">📍 Dirección</div>
+                    <div class="info-value" th:text="${usuario.getDireccion()}"></div>
+                </div>
+
+                <!-- ACCIONES -->
+                <div class="usuario-actions">
+                    <a th:href="@{/usuario/editar/{id}(id=${usuario.getId()})}" class="btn btn-primary">✏️ Editar</a>
+                    <a th:href="@{/usuario/eliminar/{id}(id=${usuario.getId()})}" class="btn btn-danger" onclick="return confirm('¿Eliminar este usuario?');">🗑️ Eliminar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ESTADO VACÍO -->
+        <div th:if="${usuarios.isEmpty()}" class="empty-state">
+            <div class="empty-state-icon">😴</div>
+            <h2>No hay usuarios</h2>
+            <p>Aún no hay usuarios registrados en el sistema.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -306,6 +306,16 @@
         <!-- Formulario de Crear -->
         <div class="form-section">
             <h2>➕ Registrar Nueva Competencia</h2>
+            
+            <div th:if="${sesionActiva}" style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #4CAF50;">
+                <strong style="color: #2e7d32;">✅ Usuario Registrado:</strong>
+                <p style="color: #555; margin: 8px 0 0 0;">
+                    <strong th:text="${usuarioNombre}"></strong> 
+                    | Edad: <span th:text="${usuarioEdad}"></span> años 
+                    | Estatura: <span th:text="${usuarioEstatura}"></span> cm
+                </p>
+            </div>
+            
             <form th:action="@{/competencia/create}" method="post">
                 <div class="form-row">
                     <div class="form-group">
