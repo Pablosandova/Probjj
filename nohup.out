@@ -1,0 +1,205 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< com.probjj:probjj >--------------------------
+[INFO] Building probjj 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.7:run (default-cli) > test-compile @ probjj >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ probjj ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 19 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ probjj ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ probjj ---
+[INFO] skip non existing resourceDirectory /Users/pabloss/Desktop/probjj/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ probjj ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] <<< spring-boot:3.5.7:run (default-cli) < test-compile @ probjj <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.7:run (default-cli) @ probjj ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.7)
+
+2025-12-09T21:06:58.838-03:00  INFO 3082 --- [probjj] [  restartedMain] com.probjj.probjj.ProbjjApplication      : Starting ProbjjApplication using Java 21.0.9 with PID 3082 (/Users/pabloss/Desktop/probjj/target/classes started by pabloss in /Users/pabloss/Desktop/probjj)
+2025-12-09T21:06:58.843-03:00  INFO 3082 --- [probjj] [  restartedMain] com.probjj.probjj.ProbjjApplication      : No active profile set, falling back to 1 default profile: "default"
+2025-12-09T21:06:58.929-03:00  INFO 3082 --- [probjj] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-12-09T21:06:58.929-03:00  INFO 3082 --- [probjj] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-12-09T21:06:59.811-03:00  INFO 3082 --- [probjj] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-09T21:06:59.880-03:00  INFO 3082 --- [probjj] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 58 ms. Found 5 JPA repository interfaces.
+2025-12-09T21:07:01.151-03:00  INFO 3082 --- [probjj] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-12-09T21:07:01.169-03:00  INFO 3082 --- [probjj] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-09T21:07:01.169-03:00  INFO 3082 --- [probjj] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2025-12-09T21:07:01.217-03:00  INFO 3082 --- [probjj] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-09T21:07:01.219-03:00  INFO 3082 --- [probjj] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2288 ms
+2025-12-09T21:07:01.541-03:00  INFO 3082 --- [probjj] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-09T21:07:01.620-03:00  INFO 3082 --- [probjj] [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.33.Final
+2025-12-09T21:07:01.667-03:00  INFO 3082 --- [probjj] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-09T21:07:02.030-03:00  INFO 3082 --- [probjj] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-09T21:07:02.082-03:00  INFO 3082 --- [probjj] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-09T21:07:02.325-03:00  INFO 3082 --- [probjj] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-12-09T21:07:02.327-03:00  INFO 3082 --- [probjj] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-09T21:07:02.361-03:00  WARN 3082 --- [probjj] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-09T21:07:02.386-03:00  INFO 3082 --- [probjj] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-09T21:07:03.617-03:00  INFO 3082 --- [probjj] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    drop table if exists actividad cascade 
+Hibernate: 
+    drop table if exists competencia cascade 
+Hibernate: 
+    drop table if exists nutrition_data cascade 
+Hibernate: 
+    drop table if exists recomendaciones cascade 
+Hibernate: 
+    drop table if exists usuario cascade 
+Hibernate: 
+    create table actividad (
+        calorias_burnadas float(53),
+        duracion integer,
+        intensidad integer,
+        created_at timestamp(6),
+        id bigint generated by default as identity,
+        updated_at timestamp(6),
+        descripcion varchar(255),
+        tipo_actividad varchar(255),
+        user_name varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table competencia (
+        created_at timestamp(6),
+        fecha_competencia timestamp(6),
+        id bigint generated by default as identity,
+        updated_at timestamp(6),
+        categoria varchar(255),
+        nombre varchar(255),
+        notas varchar(255),
+        resultados varchar(255),
+        ubicacion varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table nutrition_data (
+        calories float(53),
+        calories_goal float(53),
+        carbohydrates float(53),
+        carbohydrates_goal float(53),
+        edad integer,
+        estatura float(53),
+        peso float(53),
+        proteins float(53),
+        proteins_goal float(53),
+        tiempo_entrenamiento integer,
+        created_at timestamp(6),
+        id bigint generated by default as identity,
+        updated_at timestamp(6),
+        user_name varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table recomendaciones (
+        calorias_diarias integer,
+        carbohidratos_gramos integer,
+        estatura float(53),
+        grasas_gramos integer,
+        imc float(53),
+        peso float(53),
+        proteinas_gramos integer,
+        created_at timestamp(6),
+        id bigint generated by default as identity,
+        updated_at timestamp(6),
+        categoria_imc varchar(255),
+        observaciones TEXT,
+        recomendaciones_alimentarias TEXT,
+        recomendaciones_entrenamiento TEXT,
+        user_name varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table usuario (
+        edad integer,
+        estatura float(53),
+        creat_at timestamp(6),
+        id bigint generated by default as identity,
+        update_at timestamp(6),
+        apellido varchar(255),
+        direccion varchar(255),
+        email varchar(255),
+        nombre varchar(255),
+        password varchar(255),
+        rol varchar(255),
+        rut varchar(255),
+        primary key (id)
+    )
+Hibernate: INSERT INTO USUARIO (rut, nombre, apellido, password, email, direccion, edad, estatura, rol, creat_at, update_at) VALUES ('12345678-K', 'Juan', 'Perez', 'password123', 'juan@example.com', 'Calle Principal 123', 28, 175.5, 'USER', PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'), PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'))
+Hibernate: INSERT INTO USUARIO (rut, nombre, apellido, password, email, direccion, edad, estatura, rol, creat_at, update_at) VALUES ('98765432-9', 'Maria', 'Gonzalez', 'pass456', 'maria@example.com', 'Avenida Central 456', 32, 162.0, 'USER', PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'), PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'))
+Hibernate: INSERT INTO USUARIO (rut, nombre, apellido, password, email, direccion, edad, estatura, rol, creat_at, update_at) VALUES ('11111111-1', 'Carlos', 'Lopez', 'carlos789', 'carlos@example.com', 'Calle Secundaria 789', 25, 180.0, 'ADMIN', PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'), PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'))
+Hibernate: INSERT INTO USUARIO (rut, nombre, apellido, password, email, direccion, edad, estatura, rol, creat_at, update_at) VALUES ('22222222-2', 'Ana', 'Martinez', 'ana2024', 'ana@example.com', 'Paseo de los Robles 321', 30, 168.5, 'USER', PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'), PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'))
+Hibernate: INSERT INTO USUARIO (rut, nombre, apellido, password, email, direccion, edad, estatura, rol, creat_at, update_at) VALUES ('33333333-3', 'Roberto', 'Garcia', 'roberto123', 'roberto@example.com', 'Calle del Estadio 555', 35, 185.0, 'USER', PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'), PARSEDATETIME('2025-11-18 21:56:39','yyyy-MM-dd HH:mm:ss'))
+Hibernate: INSERT INTO USUARIO (rut, nombre, apellido, password, email, direccion, edad, estatura, rol, creat_at, update_at) VALUES ('246154716', 'agustina', 'santibanez', 'sanitayna', 'agustinasantibanez@gmail.com', 'julio zegers', 18, 147.0, 'USER', PARSEDATETIME('2025-11-18 22:02:24','yyyy-MM-dd HH:mm:ss'), PARSEDATETIME('2025-11-18 22:02:24','yyyy-MM-dd HH:mm:ss'))
+2025-12-09T21:07:03.692-03:00  INFO 3082 --- [probjj] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-09T21:07:04.267-03:00  WARN 3082 --- [probjj] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-09T21:07:04.305-03:00  INFO 3082 --- [probjj] [  restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-12-09T21:07:04.927-03:00  INFO 3082 --- [probjj] [  restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-12-09T21:07:05.012-03:00  WARN 3082 --- [probjj] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
+2025-12-09T21:07:05.025-03:00  INFO 3082 --- [probjj] [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-12-09T21:07:05.127-03:00  WARN 3082 --- [probjj] [  restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-12-09T21:07:05.130-03:00  INFO 3082 --- [probjj] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+Hibernate: 
+    drop table if exists actividad cascade 
+Hibernate: 
+    drop table if exists competencia cascade 
+Hibernate: 
+    drop table if exists nutrition_data cascade 
+Hibernate: 
+    drop table if exists recomendaciones cascade 
+Hibernate: 
+    drop table if exists usuario cascade 
+2025-12-09T21:07:05.148-03:00  WARN 3082 --- [probjj] [  restartedMain] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
+2025-12-09T21:07:05.149-03:00  INFO 3082 --- [probjj] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-12-09T21:07:05.151-03:00  INFO 3082 --- [probjj] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-12-09T21:07:05.172-03:00  INFO 3082 --- [probjj] [  restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-12-09T21:07:05.199-03:00 ERROR 3082 --- [probjj] [  restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  12.112 s
+[INFO] Finished at: 2025-12-09T21:07:05-03:00
+[INFO] ------------------------------------------------------------------------

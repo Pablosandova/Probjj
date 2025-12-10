@@ -39,7 +39,7 @@ public class AuthController {
                 session.setAttribute("usuarioEmail", usuario.get().getEmail());
                 session.setAttribute("usuarioEdad", usuario.get().getEdad());
                 session.setAttribute("usuarioEstatura", usuario.get().getEstatura());
-                return "redirect:/";
+                return "redirect:/perfil";
             } else {
                 model.addAttribute("error", "Correo/RUT o contraseña incorrectos");
                 return "auth/login";
@@ -97,7 +97,7 @@ public class AuthController {
             session.setAttribute("usuarioEdad", nuevoUsuario.getEdad());
             session.setAttribute("usuarioEstatura", nuevoUsuario.getEstatura());
             
-            return "redirect:/";
+            return "redirect:/perfil";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             return "auth/register";
