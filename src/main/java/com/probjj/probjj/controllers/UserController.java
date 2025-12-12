@@ -31,6 +31,13 @@ public class UserController {
             return "redirect:/login";
         }
         
+        // Mostrar mensaje de éxito si es un nuevo registro
+        Boolean registroExitoso = (Boolean) session.getAttribute("registroExitoso");
+        if (registroExitoso != null && registroExitoso) {
+            model.addAttribute("success", "¡Cuenta creada exitosamente! Bienvenido " + usuario.getNombre());
+            session.removeAttribute("registroExitoso");
+        }
+        
         model.addAttribute("usuario", usuario);
         return "user/perfil";
     }

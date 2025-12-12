@@ -28,13 +28,32 @@ public class UsuarioService {
 
     // Autenticar usuario
     public Optional<Usuario> autenticar(String identifier, String password) {
+        System.out.println("=== AUTENTICACION ===");
+        System.out.println("Buscando por identifier: " + identifier);
+        
         // Intentar con email
         Optional<Usuario> usuarioEmail = usuarioRepository.findByEmailAndPassword(identifier, password);
         if (usuarioEmail.isPresent()) {
+            System.out.println("✓ Usuario encontrado por EMAIL");
             return usuarioEmail;
         }
+        
+        System.out.println("Usuario no encontrado por email, intentando con RUT...");
+        
         // Intentar con RUT
-        return usuarioRepository.findByRutAndPassword(identifier, password);
+        Optional<Usuario> usuarioRut = usuarioRepository.findByRutAndPassword(identifier, password);
+        if (usuarioRut.isPresent()) {
+            System.out.println("✓ Usuario encontrado por RUT");
+        } else {
+            System.out.println("✗ Usuario no encontrado por RUT tampoco");
+            // Debug: mostrar todos los usuarios
+            List<Usuario> todos = usuarioRepository.findAll();
+            System.out.println("Total usuarios en DB: " + todos.size());
+            for (Usuario u : todos) {
+                System.out.println("  - Email: " + u.getEmail() + ", RUT: " + u.getRut());
+            }
+        }
+        return usuarioRut;
     }
 
     // Obtener todos los usuarios

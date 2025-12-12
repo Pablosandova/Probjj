@@ -1,0 +1,3 @@
+-- Insertar usuarios de prueba
+INSERT INTO USUARIO (rut, nombre, apellido, password, email, direccion, edad, estatura, rol, creat_at, update_at) VALUES
+('174184143', 'pablo', 'sandoval soto', '123456', 'sandovalsotopablo@gmail.com', 'providencia', 35, 172.0, 'USER', PARSEDATETIME('2025-12-10 19:45:26','yyyy-MM-dd HH:mm:ss'), PARSEDATETIME('2025-12-10 19:45:26','yyyy-MM-dd HH:mm:ss'));

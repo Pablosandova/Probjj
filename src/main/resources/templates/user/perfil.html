@@ -131,20 +131,47 @@
             margin-bottom: 30px;
             font-size: 18px;
         }
+        
+        .success-banner {
+            background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4);
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
     
     <div class="perfil-container">
+        <div class="success-banner" th:if="${success}">
+            ✅ <span th:text="${success}"></span>
+        </div>
+        
         <div class="welcome-message">
             <h2>¡Bienvenido a tu perfil, <span th:text="${usuario.nombre}"></span>!</h2>
             <p>Esta es tu información personal</p>
         </div>
         
         <div class="perfil-header">
-            <div class="perfil-avatar" th:text="${#strings.substring(usuario.nombre, 0, 1)}">P</div>
-            <h1 th:text="${usuario.nombre + ' ' + usuario.apellido}">Nombre Completo</h1>
+            <div class="perfil-avatar" th:text="${#strings.toUpperCase(#strings.substring(usuario.nombre, 0, 1))}">P</div>
+            <h1><span th:text="${usuario.nombre}"></span> <span th:text="${usuario.apellido}"></span></h1>
             <p style="color: #666; font-size: 14px;" th:text="${usuario.rol}">USER</p>
         </div>
         
@@ -161,12 +188,12 @@
             
             <div class="info-card">
                 <label>Edad</label>
-                <div class="value" th:text="${usuario.edad} + ' años'">25 años</div>
+                <div class="value"><span th:text="${usuario.edad}"></span> años</div>
             </div>
             
             <div class="info-card">
                 <label>Estatura</label>
-                <div class="value" th:text="${usuario.estatura} + ' cm'">175 cm</div>
+                <div class="value"><span th:text="${usuario.estatura}"></span> cm</div>
             </div>
             
             <div class="info-card" style="grid-column: 1 / -1;">
@@ -183,7 +210,5 @@
             <a href="/logout" class="btn btn-danger">Cerrar Sesión</a>
         </div>
     </div>
-    
-    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

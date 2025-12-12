@@ -31,9 +31,14 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@RequestParam String identifier, @RequestParam String password, HttpSession session, Model model) {
         try {
+            System.out.println("=== INTENTO DE LOGIN ===");
+            System.out.println("Identifier: " + identifier);
+            System.out.println("Password length: " + password.length());
+            
             Optional<Usuario> usuario = usuarioService.autenticar(identifier, password);
             
             if (usuario.isPresent()) {
+                System.out.println("✓ Usuario encontrado: " + usuario.get().getNombre());
                 session.setAttribute("usuarioId", usuario.get().getId());
                 session.setAttribute("usuarioNombre", usuario.get().getNombre());
                 session.setAttribute("usuarioEmail", usuario.get().getEmail());
@@ -41,10 +46,13 @@ public class AuthController {
                 session.setAttribute("usuarioEstatura", usuario.get().getEstatura());
                 return "redirect:/perfil";
             } else {
+                System.out.println("✗ Usuario no encontrado con credenciales proporcionadas");
                 model.addAttribute("error", "Correo/RUT o contraseña incorrectos");
                 return "auth/login";
             }
         } catch (Exception e) {
+            System.out.println("✗ Error en login: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("error", e.getMessage());
             return "auth/login";
         }
@@ -60,9 +68,9 @@ public class AuthController {
     @PostMapping("/register")
     public String register(@RequestParam String rut, 
                           @RequestParam String nombre, 
-                          @RequestParam String apellido,
+                          @RequestParam(required = false) String apellido,
                           @RequestParam String email,
-                          @RequestParam String direccion,
+                          @RequestParam(required = false) String direccion,
                           @RequestParam Integer edad,
                           @RequestParam Double estatura,
                           @RequestParam String password,
@@ -76,32 +84,82 @@ public class AuthController {
                 return "auth/register";
             }
             
-            // Validar que los campos no estén vacíos
-            if (rut.isEmpty() || nombre.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                model.addAttribute("error", "Por favor completa todos los campos");
+            // Validar que los campos obligatorios no estén vacíos
+            if (rut == null || rut.trim().isEmpty() || 
+                nombre == null || nombre.trim().isEmpty() || 
+                email == null || email.trim().isEmpty() || 
+                password == null || password.isEmpty()) {
+                model.addAttribute("error", "Por favor completa todos los campos obligatorios");
                 return "auth/register";
             }
             
-            // Crear nuevo usuario
-            Usuario nuevoUsuario = new Usuario(rut, nombre, apellido, password, email, direccion, edad);
+            // Validar formato de email básico
+            if (!email.contains("@") || !email.contains(".")) {
+                model.addAttribute("error", "Por favor ingresa un email válido");
+                return "auth/register";
+            }
+            
+            // Validar edad
+            if (edad == null || edad < 13 || edad > 120) {
+                model.addAttribute("error", "Por favor ingresa una edad válida (13-120 años)");
+                return "auth/register";
+            }
+            
+            // Validar estatura
+            if (estatura == null || estatura < 100 || estatura > 250) {
+                model.addAttribute("error", "Por favor ingresa una estatura válida (100-250 cm)");
+                return "auth/register";
+            }
+            
+            // Validar longitud de contraseña
+            if (password.length() < 6) {
+                model.addAttribute("error", "La contraseña debe tener al menos 6 caracteres");
+                return "auth/register";
+            }
+            
+            // Crear nuevo usuario con valores seguros
+            Usuario nuevoUsuario = new Usuario(
+                rut.trim(), 
+                nombre.trim(), 
+                apellido != null ? apellido.trim() : "", 
+                password, 
+                email.trim(), 
+                direccion != null ? direccion.trim() : "", 
+                edad
+            );
             nuevoUsuario.setEstatura(estatura);
-            usuarioService.registrar(nuevoUsuario);
+            
+            System.out.println("=== REGISTRO DE USUARIO ===");
+            System.out.println("Email: " + email);
+            System.out.println("RUT: " + rut);
+            System.out.println("Password length: " + password.length());
+            
+            Usuario usuarioGuardado = usuarioService.registrar(nuevoUsuario);
+            System.out.println("✓ Usuario guardado con ID: " + usuarioGuardado.getId());
+            System.out.println("✓ Email: " + usuarioGuardado.getEmail());
+            System.out.println("✓ RUT: " + usuarioGuardado.getRut());
             
             // Exportar datos actualizados a import.sql
-            exportDataService.exportarUsuariosAImportSql();
+            // exportDataService.exportarUsuariosAImportSql(); // Comentado temporalmente
             
             // Crear sesión automáticamente
-            session.setAttribute("usuarioId", nuevoUsuario.getId());
-            session.setAttribute("usuarioNombre", nuevoUsuario.getNombre());
-            session.setAttribute("usuarioEmail", nuevoUsuario.getEmail());
-            session.setAttribute("usuarioEdad", nuevoUsuario.getEdad());
-            session.setAttribute("usuarioEstatura", nuevoUsuario.getEstatura());
+            session.setAttribute("usuarioId", usuarioGuardado.getId());
+            session.setAttribute("usuarioNombre", usuarioGuardado.getNombre());
+            session.setAttribute("usuarioEmail", usuarioGuardado.getEmail());
+            session.setAttribute("usuarioEdad", usuarioGuardado.getEdad());
+            session.setAttribute("usuarioEstatura", usuarioGuardado.getEstatura());
+            session.setAttribute("registroExitoso", true);
             
+            model.addAttribute("success", "¡Usuario creado exitosamente! Redirigiendo a tu perfil...");
             return "redirect:/perfil";
         } catch (RuntimeException e) {
+            System.err.println("✗ Error RuntimeException: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("error", e.getMessage());
             return "auth/register";
         } catch (Exception e) {
+            System.err.println("✗ Error Exception: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("error", "Error al registrar: " + e.getMessage());
             return "auth/register";
         }
