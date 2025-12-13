@@ -8,3 +8,9 @@ services:
     envVars:
       - key: PORT
         value: 8080
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://gateway01.us-east-1.prod.aws.tidbcloud.com:4000/test?sslMode=VERIFY_IDENTITY&enabledTLSProtocols=TLSv1.2,TLSv1.3
+      - key: SPRING_DATASOURCE_USERNAME
+        value: 2jyRocKVS1wp4Uy.root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: XoCqViv6lJaurU4v

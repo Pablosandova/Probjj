@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "com.probjj.probjj.dao")
+@EnableJpaRepositories(basePackages = {"com.probjj.probjj.dao", "com.probjj.probjj.repository"})
 public class ProbjjApplication {
 
 	public static void main(String[] args) {

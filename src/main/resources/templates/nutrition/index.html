@@ -208,6 +208,15 @@
             border-left: 4px solid #d32f2f;
         }
 
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+
         /* TABLE SECTION */
         .table-section {
             background: white;
@@ -363,6 +372,10 @@
 
                 <div th:if="${error}" class="error-message">
                     <strong>❌ Error:</strong> <span th:text="${error}"></span>
+                </div>
+
+                <div th:if="${success}" class="success-message">
+                    <strong>✅ Éxito:</strong> <span th:text="${success}"></span>
                 </div>
 
                 <div th:if="${sesionActiva}" style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #4CAF50;">

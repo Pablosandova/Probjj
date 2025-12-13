@@ -91,7 +91,7 @@ public class NutritionController {
 
     // Crear desde formulario
     @PostMapping("/create")
-    public String createFromForm(@ModelAttribute NutritionDataEntity nutritionData, Model model) {
+    public String createFromForm(@ModelAttribute NutritionDataEntity nutritionData, Model model, HttpSession session) {
         try {
             nutritionDataService.createNutritionData(nutritionData);
             
@@ -104,7 +104,23 @@ public class NutritionController {
                 );
             }
             
-            return "redirect:/nutrition/";
+            // Recargar la lista y mostrar mensaje de éxito
+            List<NutritionDataEntity> nutritionList = nutritionDataService.getAllNutritionData();
+            model.addAttribute("nutritionList", nutritionList);
+            model.addAttribute("nutritionData", new NutritionDataEntity());
+            model.addAttribute("success", "Datos nutricionales guardados correctamente");
+            
+            // Cargar datos de sesión
+            String usuarioNombre = (String) session.getAttribute("usuarioNombre");
+            Integer usuarioEdad = (Integer) session.getAttribute("usuarioEdad");
+            Double usuarioEstatura = (Double) session.getAttribute("usuarioEstatura");
+            
+            model.addAttribute("usuarioNombre", usuarioNombre);
+            model.addAttribute("usuarioEdad", usuarioEdad);
+            model.addAttribute("usuarioEstatura", usuarioEstatura);
+            model.addAttribute("sesionActiva", usuarioNombre != null);
+            
+            return "nutrition/index";
         } catch (Exception e) {
             List<NutritionDataEntity> nutritionList = nutritionDataService.getAllNutritionData();
             model.addAttribute("nutritionList", nutritionList);
